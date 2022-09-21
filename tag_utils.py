@@ -64,18 +64,31 @@ def get_file_tags(file: str) -> List[str]:
     return file_tags
 
 
+def get_files_tags(files: List[str]) -> List[str]:
+    """获取一组文件使用到的tags
+
+    Args:
+        files (List[str]): 一组文件路径
+
+    Returns:
+        List[str]: 这组文件的所有tags
+    """
+    total_tags = []
+    for file in files:
+        file_tags = get_file_tags(file)
+        for tag in file_tags:
+            if tag not in total_tags:
+                total_tags.append(tag)
+    return sorted(total_tags)
+
+
 def get_dir_tags(dir: str) -> List[str]:
     """获取一个目录下所有文件使用到的tags
 
     Args:
         dir (str): 目录的路径
     """
-    dir_tags = []
     path = Path(dir)
-    for file in path.iterdir():
-        file_tags = get_file_tags(file)
-        for tag in file_tags:
-            if tag not in dir_tags:
-                dir_tags.append(tag)
-    return sorted(dir_tags)
+    files = list(path.iterdir())
+    return get_files_tags(files)
 

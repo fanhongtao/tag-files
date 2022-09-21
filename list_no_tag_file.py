@@ -23,10 +23,10 @@ def show_help():
 
 
 def list_no_tag_file(files: List[str]):
-    """显示指定目录下所有未指定tag的文件
+    """显示输入的一组文件中所有未指定tag的文件
 
     Args:
-        dir (str): 指定的目录
+        files (List[str]): 文件名
     """
     for entry in files:
         file = Path(entry)

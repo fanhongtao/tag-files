@@ -3,30 +3,31 @@
 import getopt
 import sys
 import tag_utils
+from typing import List
 
 
 def show_help():
     """ 显示帮助信息 """
-    print("显示指定目录下所有文件使用到的tag")
+    print("显示输入的一组文件使用到的tag")
     print()
     program = sys.argv[0]
-    print(program + " <dir>")
+    print(program + " <files>")
     def print_arg(name, info): print("  %-28s\t%s" % (name, info))
     print_arg("-h, --help", "显示帮助信息")
     print()
-    print_arg("<dir>", "指定的目录")
+    print_arg("<files>", "待判断的文件名（一个或多个，支持使用通配符）")
     print()
-    print(program + " .")
-    print(program + " /home/music")
+    print(program + " *")
+    print(program + " 张学友*")
 
 
-def list_tag(dir: str):
-    """显示指定目录下所有文件使用到的tag
+def list_tag(files: List[str]):
+    """显示输入的一组文件使用到的tag
 
     Args:
-        dir (str): 指定的目录
+        files (List[str]): 文件名
     """
-    dir_tags = tag_utils.get_dir_tags(dir)
+    dir_tags = tag_utils.get_files_tags(files)
     for tag in dir_tags:
         print(tag)
 
@@ -44,7 +45,7 @@ def main():
     if len(args) < 1:
         show_help()
     else:
-        list_tag(args[0])
+        list_tag(args)
 
 
 if __name__ == '__main__':
