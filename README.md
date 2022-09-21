@@ -44,3 +44,19 @@
 | [show_tag.py](show_tag.py) | 显示一个或多个文件的tag |
 | [tag_utils.py](tag_utils.py) | tag相关的工具类 |
 
+
+# 应用举例
+
+* 将当前目录下所有没有 tag 的文件都添加名为 "中文" 的 tag:
+
+```sh
+list_no_tag_file.py *  | xargs add_tag.py 中文
+```
+
+* 将所有以 "千百惠" 为前缀的文件都添加名为 "中文" 的 tag，并且显示相关文件所有的 tag 信息:
+
+```sh
+ls -b 千百惠*  | xargs add_tag.py 中文 | xargs show_tag.py
+```
+
+

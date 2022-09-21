@@ -37,6 +37,7 @@ def add_tag(tag: str, files: List[str]):
             fil_tags.append(tag)
         content['tags'] = fil_tags
         tag_utils.write_tag_content(tag_file, content)
+        print(f"'{file}'")
 
 
 def main():

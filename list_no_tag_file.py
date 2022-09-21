@@ -4,36 +4,37 @@ import getopt
 import sys
 import tag_utils
 from pathlib import Path
+from typing import List
 
 
 def show_help():
     """ 显示帮助信息 """
-    print("显示指定目录下所有未指定tag的文件")
+    print("显示输入的一组文件中所有未指定tag的文件")
     print()
     program = sys.argv[0]
-    print(program + " <dir>")
+    print(program + " <files>")
     def print_arg(name, info): print("  %-28s\t%s" % (name, info))
     print_arg("-h, --help", "显示帮助信息")
     print()
-    print_arg("<dir>", "指定的目录")
+    print_arg("<files>", "待判断的文件名（一个或多个，支持使用通配符）")
     print()
-    print(program + " .")
-    print(program + " /home/music")
+    print(program + " *")
+    print(program + " 张学友*")
 
 
-def list_no_tag_file(dir: str):
+def list_no_tag_file(files: List[str]):
     """显示指定目录下所有未指定tag的文件
 
     Args:
         dir (str): 指定的目录
     """
-    path = Path(dir)
-    for file in path.iterdir():
+    for entry in files:
+        file = Path(entry)
         if file.is_dir():
             continue
         file_tags = tag_utils.get_file_tags(file)
         if file_tags == []:
-            print(file)
+            print(f"'{file}'")
 
 
 def main():
@@ -49,7 +50,7 @@ def main():
     if len(args) < 1:
         show_help()
     else:
-        list_no_tag_file(args[0])
+        list_no_tag_file(args)
 
 
 if __name__ == '__main__':
