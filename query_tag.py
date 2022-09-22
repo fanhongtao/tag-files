@@ -12,10 +12,11 @@ def show_help():
     print("在指定目录下查询含有指定tag的文件")
     print()
     program = sys.argv[0]
-    print(program + " -d <dir> <tags>")
+    print(program + " [-h] [-print0] [-d <dir>] <tags>")
     def print_arg(name, info): print("  %-28s\t%s" % (name, info))
     print_arg("-h, --help", "显示帮助信息")
-    print_arg("-d, --dir", "待查询的目录")
+    print_arg("-print0", "输出文件名使用 '\\0' 进行分隔（用于配合 xargs -0 使用）")
+    print_arg("-d, --dir", "待查询的目录，默认为当前目录")
     print()
     print_arg("<tags>", "待查询的标签(tag)。")
     print_arg("", "当指定多个标签时，文件必须同时包含所有指定的标签才会显示。")
@@ -41,21 +42,26 @@ def query_tag(dir: str, tags: List[str]):
             if tag not in file_tags:
                 break
         else:
-            print(file)
+            print(file, end=g_end)
 
 
 def main():
     """ 分析调用参数，进行相应的处理 """
     dir = "."
     long_args = ["help", "dir="]
-    opts, args = getopt.getopt(sys.argv[1:], "hd:", long_args)
+    opts, args = getopt.getopt(sys.argv[1:], "hd:-print0", long_args)
 
+    global g_end
+    g_end = '\n'
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             show_help()
             return
         if opt in("-d", "--dir"):
             dir = arg
+            continue
+        if opt in ("-print0"):
+            g_end = '\0'
             continue
 
     if len(args) < 1:

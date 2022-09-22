@@ -47,16 +47,31 @@
 
 # 应用举例
 
+* 列出当前目录下所有没有 tag 的文件
+
+```sh
+list_no_tag_file.py *
+```
+
 * 将当前目录下所有没有 tag 的文件都添加名为 "中文" 的 tag:
 
 ```sh
-list_no_tag_file.py *  | xargs add_tag.py 中文
+list_no_tag_file.py -print0 *  | xargs -0 add_tag.py 中文
 ```
+
+> 注意：为了让 `list_no_tag_file.py` 和 `add_tag.py` 能够串联起来，前者需要增加 `-print0` 参数，后者前导的 xargs 命令需要指定 `-0` 参数。
+
+> `-print0` 参数的命名，是借鉴了 `find` 命令的做法。
 
 * 将所有以 "千百惠" 为前缀的文件都添加名为 "中文" 的 tag，并且显示相关文件所有的 tag 信息:
 
 ```sh
-ls -b 千百惠*  | xargs add_tag.py 中文 | xargs show_tag.py
+ls -b 千百惠*  | xargs add_tag.py -print0 中文 | xargs -0 show_tag.py
 ```
 
+* 将所有tag为 “纯音乐” 的文件拷贝到 `/home/absolute_music` 目录:
+
+```sh
+query_tag.py -print0 纯音乐 | xargs -0 -I '{}' cp '{}' /home/absolute_music/
+```
 
