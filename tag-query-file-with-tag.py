@@ -2,7 +2,7 @@
 
 import getopt
 import sys
-import tag_utils
+import utils.tag_utils as tag_utils
 from pathlib import Path
 from typing import List
 

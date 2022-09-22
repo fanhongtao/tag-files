@@ -36,42 +36,49 @@
 
 | 文件名 | 功能 |
 |:--|:--|
-| [add_tag.py](add_tag.py) | 给一个或多个文件添加tag |
-| [delete_tag.py](delete_tag.py) | 给一个或多个文件删除tag |
-| [list_no_tag_file.py](list_no_tag_file.py) | 显示指定目录下所有未指定tag的文件 |
-| [list_tag.py](list_tag.py) | 显示指定目录下所有文件使用到的tag |
-| [query_tag.py](query_tag.py) | 在指定目录下查询含有指定tag的文件 |
-| [show_tag.py](show_tag.py) | 显示一个或多个文件的tag |
-| [tag_utils.py](tag_utils.py) | tag相关的工具类 |
+| [tag-add.py](tag-add.py) | 给一个或多个文件添加tag |
+| [tag-delete.py](tag-delete.py) | 给一个或多个文件删除tag |
+| [tag-list-file-without-tag.py](tag-list-file-without-tag.py) | 显示指定目录下所有未指定tag的文件 |
+| [tag-list-tag-used-with-file.py](tag-list-tag-used-with-file.py) | 显示指定目录下所有文件使用到的tag |
+| [tag-query-file-with-tag.py](tag-query-file-with-tag.py) | 在指定目录下查询含有指定tag的文件 |
+| [tag-show.py](tag-show.py) | 显示一个或多个文件的tag |
+
+> 对外提供的命令，都使用 "tag-" 前缀，这样只需要输入前缀，然后按 TAB 键，让系统联想。以便减少记忆命令的操作。
 
 
 # 应用举例
 
+* 查询当前目录下所有文件共用了那些tag
+
+```sh
+tag-list-tag-used-with-file.py *
+```
+
 * 列出当前目录下所有没有 tag 的文件
 
 ```sh
-list_no_tag_file.py *
+tag-list-file-without-tag.py *
 ```
 
 * 将当前目录下所有没有 tag 的文件都添加名为 "中文" 的 tag:
 
 ```sh
-list_no_tag_file.py -print0 *  | xargs -0 add_tag.py 中文
+tag-list-file-without-tag.py -print0 *  | xargs -0 tag-add.py 中文
 ```
 
-> 注意：为了让 `list_no_tag_file.py` 和 `add_tag.py` 能够串联起来，前者需要增加 `-print0` 参数，后者前导的 xargs 命令需要指定 `-0` 参数。
+> 注意：为了让 `tag-list-file-without-tag.py` 和 `tag-add.py` 能够串联起来，前者需要增加 `-print0` 参数，后者前导的 xargs 命令需要指定 `-0` 参数。
 
 > `-print0` 参数的命名，是借鉴了 `find` 命令的做法。
 
 * 将所有以 "千百惠" 为前缀的文件都添加名为 "中文" 的 tag，并且显示相关文件所有的 tag 信息:
 
 ```sh
-ls -b 千百惠*  | xargs add_tag.py -print0 中文 | xargs -0 show_tag.py
+ls -b 千百惠*  | xargs tag-add.py -print0 中文 | xargs -0 tag-show.py
 ```
 
 * 将所有tag为 “纯音乐” 的文件拷贝到 `/home/absolute_music` 目录:
 
 ```sh
-query_tag.py -print0 纯音乐 | xargs -0 -I '{}' cp '{}' /home/absolute_music/
+tag-query-file-with-tag.py -print0 纯音乐 | xargs -0 -I '{}' cp '{}' /home/absolute_music/
 ```
 
