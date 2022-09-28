@@ -32,18 +32,29 @@
 }
 ```
 
+# 运行环境
+
+在图形界面 `tag-ui.py` 中，使用了 `pypinyin` 包，以便能够对中文文件名按拼音排序，需要手工安装。
+
+```sh
+pip3 install pypinyin
+```
+
+
 # 文件说明
 
 | 文件名 | 功能 |
 |:--|:--|
-| [tag-add.py](tag-add.py) | 给一个或多个文件添加tag |
-| [tag-delete.py](tag-delete.py) | 给一个或多个文件删除tag |
-| [tag-list-file-without-tag.py](tag-list-file-without-tag.py) | 显示指定目录下所有未指定tag的文件 |
-| [tag-list-tag-used-with-file.py](tag-list-tag-used-with-file.py) | 显示指定目录下所有文件使用到的tag |
-| [tag-query-file-with-tag.py](tag-query-file-with-tag.py) | 在指定目录下查询含有指定tag的文件 |
-| [tag-show.py](tag-show.py) | 显示一个或多个文件的tag |
+| [tag_add.py](tag_add.py) | 给一个或多个文件添加tag |
+| [tag_delete.py](tag_delete.py) | 给一个或多个文件删除tag |
+| [tag_list_file_without_tag.py](tag_list_file_without_tag.py) | 显示指定目录下所有未指定tag的文件 |
+| [tag_list_tag_used_with_file.py](tag_list_tag_used_with_file.py) | 显示指定目录下所有文件使用到的tag |
+| [tag_query_file_with_tag.py](tag_query_file_with_tag.py) | 在指定目录下查询含有指定tag的文件 |
+| [tag_show.py](tag_show.py) | 显示一个或多个文件的tag |
+| |
+| [tag_ui.pyw](tag_ui.pyw) | 一个简单的图形界面，目前仅支持增加、删除Tag。 |
 
-> 对外提供的命令，都使用 "tag-" 前缀，这样只需要输入前缀，然后按 TAB 键，让系统联想。以便减少记忆命令的操作。
+> 对外提供的命令，都使用 "tag_" 前缀，这样只需要输入前缀，然后按 TAB 键，让系统联想。以便减少记忆命令的操作。
 
 
 # 应用举例
@@ -51,34 +62,34 @@
 * 查询当前目录下所有文件共用了那些tag
 
 ```sh
-tag-list-tag-used-with-file.py *
+tag_list_tag_used_with_file.py *
 ```
 
 * 列出当前目录下所有没有 tag 的文件
 
 ```sh
-tag-list-file-without-tag.py *
+tag_list_file_without_tag.py *
 ```
 
 * 将当前目录下所有没有 tag 的文件都添加名为 "中文" 的 tag:
 
 ```sh
-tag-list-file-without-tag.py -print0 *  | xargs -0 tag-add.py 中文
+tag_list_file_without_tag.py -print0 *  | xargs -0 tag_add.py 中文
 ```
 
-> 注意：为了让 `tag-list-file-without-tag.py` 和 `tag-add.py` 能够串联起来，前者需要增加 `-print0` 参数，后者前导的 xargs 命令需要指定 `-0` 参数。
+> 注意：为了让 `tag_list_file_without_tag.py` 和 `tag_add.py` 能够串联起来，前者需要增加 `-print0` 参数，后者前导的 xargs 命令需要指定 `-0` 参数。
 
 > `-print0` 参数的命名，是借鉴了 `find` 命令的做法。
 
 * 将所有以 "千百惠" 为前缀的文件都添加名为 "中文" 的 tag，并且显示相关文件所有的 tag 信息:
 
 ```sh
-ls -b 千百惠*  | xargs tag-add.py -print0 中文 | xargs -0 tag-show.py
+ls -b 千百惠*  | xargs tag_add.py -print0 中文 | xargs -0 tag_show.py
 ```
 
 * 将所有tag为 “纯音乐” 的文件拷贝到 `/home/absolute_music` 目录:
 
 ```sh
-tag-query-file-with-tag.py -print0 纯音乐 | xargs -0 -I '{}' cp '{}' /home/absolute_music/
+tag_query_file_with_tag.py -print0 纯音乐 | xargs -0 -I '{}' cp '{}' /home/absolute_music/
 ```
 

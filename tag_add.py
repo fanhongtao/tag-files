@@ -23,12 +23,13 @@ def show_help():
     print(program + " 日文 酒井法子*")
 
 
-def add_tag(tag: str, files: List[str]):
+def add_tag(tag: str, files: List[str], end:str=None):
     """给指定的文件添加标签
 
     Args:
         tag (str): 标签
         files (List[str]): 文件名数组
+        end (str): 输出时的结尾符号。为 None 时表示不输出
     """
     for file in files:
         tag_file = tag_utils.get_tag_file(file)
@@ -38,7 +39,8 @@ def add_tag(tag: str, files: List[str]):
             fil_tags.append(tag)
         content['tags'] = fil_tags
         tag_utils.write_tag_content(tag_file, content)
-        print(file, end=g_end)
+        if not (end is None):
+            print(file, end=end)
 
 
 def main():
@@ -46,20 +48,19 @@ def main():
     long_args = ["help"]
     opts, args = getopt.getopt(sys.argv[1:], "h-print0", long_args)
 
-    global g_end
-    g_end = '\n'
+    end = '\n'
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             show_help()
             return
         if opt in ("-print0"):
-            g_end = '\0'
+            end = '\0'
             continue
 
     if len(args) < 2:
         show_help()
     else:
-        add_tag(args[0], args[1:])
+        add_tag(args[0], args[1:], end)
 
 
 if __name__ == '__main__':

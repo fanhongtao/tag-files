@@ -45,7 +45,7 @@ def write_tag_content(tag_file: Path, tag_content:Dict):
         tag_file (Path): tag文件
         tag_content (Dict): 待写入的内容
     """
-    with open(tag_file, 'w') as f:
+    with open(tag_file, 'w', encoding='utf-8') as f:
         f.write(json.dumps(tag_content, ensure_ascii=False, indent=2))
 
 
