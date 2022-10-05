@@ -80,17 +80,14 @@ class TagUI():
         menubar.add_command(label='删除Tag', command=self.on_delete_tag)
         self.file_list_menu = menubar
 
-        columns = ('name', 'suffix', 'size', 'date')
-        sort_types = ('zh', 'en', 'int', 'en')
-        widths = (500, 60, 80, 200)
-        texts = ("Name", "Ext", "Size", "Date")
-        anchors = ("w", "w", "e", "c")
-        self.file_list = ttk.Treeview(frame, columns=columns, show='headings')
-        for i in range(len(columns)):
-            self.file_list.column(columns[i], width=widths[i], minwidth=50, anchor=anchors[i])
-            self.file_list.heading(columns[i], text=texts[i],
-                command=lambda c=columns[i], t=sort_types[i]: gui_utils.sort_treeview_column(self.file_list, c, t, True))
-
+        column_infos = [
+            gui_utils.Column('name', 'Name', 'w', 500, 'zh'),
+            gui_utils.Column('ext', 'Ext', 'w', 60, 'en'),
+            gui_utils.Column('size', 'Size', 'e', 80, 'int'),
+            gui_utils.Column('date', 'Date', 'e', 200, 'en')
+        ]
+        self.file_list = gui_utils.SortableTreeView(frame, column_infos=column_infos)
+        self.file_list.bind("<Return>", self.on_open_file)
         self.file_list.bind("<Double-1>", self.on_open_file)
         self.file_list.bind("<Button-3>", self.on_file_list_popup)
         self.file_list.bind("<<TreeviewSelect>>", self.on_select_files)
@@ -187,6 +184,7 @@ class TagUI():
         [self.file_list.delete(item) for item in items]
         for data in visible_file_data:
             self.file_list.insert('', 'end', values = data)
+        self.file_list.sort()
 
 
     def on_open_file(self, event):
